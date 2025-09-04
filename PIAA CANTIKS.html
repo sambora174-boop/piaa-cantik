@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <!-- 🔒 Cegah zoom/tap-zoom -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>UNTUK ORANG YANG PALING CANTIK</title>
+  <style>
+    html, body {
+      margin:0;
+      padding:0;
+      height:100%;
+      overflow:hidden;   /* 🔒 cegah scroll */
+      touch-action:none; /* 🔒 cegah geser/tap */
+      font-family: Arial, sans-serif;
+    }
+
+    /* Halaman Gembok */
+    #lockPage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+			align-items: flex-start;
+			padding-top: 80px;
+      height: 100vh;
+      background: linear-gradient(180deg,#fff0f4 0%, #ffdfe9 100%);
+    }
+    .lockContent {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .title { font-weight: 800; font-size: 22px; color: #b3124a; text-align: center; }
+    .subtitle { font-size: 14px; color: #555; text-align: center; }
+
+    .lock-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 26px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dials {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .dial {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dial button {
+      width: 60px; height: 40px;
+      border-radius: 8px;
+      border: 0;
+      background: linear-gradient(180deg,#ff9db7,#ff6b9a);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .digit {
+      margin: 8px 0;
+      font-size: 26px;
+      font-weight: bold;
+      color: #333;
+    }
+    .open-btn {
+      margin-top: 16px;
+      width: 100%;
+      padding: 12px;
+      background: #ff4d6d;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #status { margin-top: 8px; font-weight: bold; color: #333; }
+
+    /* Halaman Animasi */
+    #lovePage {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #000;
+      overflow: hidden;
+      flex-direction: column;
+      position: relative;
+    }
+    canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index:0;
+      pointer-events:none; /* 🔒 canvas terkunci */
+    }
+    h1 {
+      position: relative;
+      font-family: 'Brush Script MT', cursive;
+      color: #ff4d6d;
+      font-size: 2em;
+      text-align: center;
+      text-shadow: 0 0 20px rgba(255, 0, 102, 0.8);
+      z-index: 2;
+			margin-top: -150px;
+    }
+    .next-btn {
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Halaman Kata-kata */
+    #page3 {
+      display: none;
+      height: 100vh;
+      background: linear-gradient(180deg,#ffe8f0,#ffd3e0);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      text-align: center;
+      padding: 65px 20px 20px;
+      font-size: 16px;
+      font-family: "Georgia", serif;
+      color: #b3124a;
+      line-height: 1.6;
+    }
+		
+  </style>
+</head>
+<body>
+  <!-- Gembok -->
+  <div id="lockPage">
+    <div class="lockContent">
+      <div class="title">🔒 masukan PINnya</div>
+      <div class="subtitle">hii cantiikk, PINnya tanggal kitaa jadian🫶🏼</div>
+      <div class="lock-card">
+        <div class="dials">
+          <div class="dial">
+            <button onclick="changeDigit(0,1)">▲</button>
+            <div id="d0" class="digit">0</div>
+            <button onclick="changeDigit(0,-1)">▼</button>
+          </div>
+          <div class="dial">
+            <button onclick="changeDigit(1,1)">▲</button>
+            <div id="d1" class="digit">0</div>
+            <button onclick="changeDigit(1,-1)">▼</button>
+          </div>
+          <div class="dial">
+            <button onclick="changeDigit(2,1)">▲</button>
+            <div id="d2" class="digit">0</div>
+            <button onclick="changeDigit(2,-1)">▼</button>
+          </div>
+          <div class="dial">
+            <button onclick="changeDigit(3,1)">▲</button>
+            <div id="d3" class="digit">0</div>
+            <button onclick="changeDigit(3,-1)">▼</button>
+          </div>
+        </div>
+        <button class="open-btn" onclick="checkCombination()">Buka</button>
+        <div id="status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animasi Cinta -->
+  <div id="lovePage">
+    <canvas id="canvas"></canvas>
+    <h1>ii lovve youu soo muuch sayaangkuu 🤍🤍</h1>
+    <button class="next-btn" onclick="goToPage3()">pesan sedikit ➜</button>
+  </div>
+
+  <!-- Halaman Kata-kata -->
+  <div id="page3">
+    <div>
+      💌 hiii sayanggkuu cintaakuu🤍🤍 
+      <br><br>
+      ngak kerasaa yahh sayangg kitaa dah 9 bulan yaa walaupunn baruu seupill eheheh, ooh yaa sayaang kann dahh 9 bulann nii apalagi kitaa sering berantemm, kitaa haruss kuat kuat yahh sayang ngehadepiinya, apa lagii kitaa sekarang sama sama egois eheheh, sayaangg kalauu akuu adaa salahh atauu gimana akuu mintaa maaff yaahh sayangg, walauupunn akuu seringg kebawaa suasaanaa akuu tetepp kokk sayang sama kamuu cintaa samaa kamuu, yaaa mungkinn adaa kataa katakuu yangg buatt kamuu sakitt hatii tapii dii balikk ituu akuu sadar sayangg setelahh ngelakuinn apaapunn ituu yangg buatt kamuu sakitt hatii. akuu ngakk bakalann ngerubahh cintaaku, sayangku, perasaanku, selagii kamuu ngehargaiin hall kecill akuu tetepp excitedd saama kamuuu huuhh. akuu sebenernyaa cintaa bangget sama kamuu asall kamuu tauu ajaa, tapii kamunyaa nyepelehinn huuh☹️☹️. tapiii takk papaa, III LOOVEE YOUU SOO MUUCH SAYAANGG🤍🤍
+      <br><br>
+      AKUU CINTAA BANGET SAMA KAMU, KAMUU MAUU BAGAI MANAAPUN ITUU🤍🫶🏼🫶🏼
+    </div>
+  </div>
+
+  <script>
+    // === Gembok ===
+    const CORRECT = [0,3,1,2]; // kode kombinasi
+    let current = [0,0,0,0];
+    function changeDigit(i,dir){
+      current[i]=(current[i]+dir+10)%10;
+      document.getElementById('d'+i).textContent=current[i];
+      document.getElementById('status').textContent='';
+    }
+    function checkCombination(){
+      if(current.join('')===CORRECT.join('')){
+        document.getElementById('lockPage').style.display='none';
+        document.getElementById('lovePage').style.display='flex';
+        createHeart(); animate();
+      } else {
+        document.getElementById('status').textContent='Coba lagi sayang 🤍';
+      }
+    }
+
+    // === Animasi Partikel Hati ===
+    const canvas=document.getElementById('canvas');
+    const ctx=canvas.getContext('2d');
+    let W,H;
+    function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+    window.addEventListener('resize',resize); resize();
+
+    class Particle {
+      constructor(x,y,tx,ty,color){
+        this.x=x; this.y=y; this.tx=tx; this.ty=ty;
+        this.color=color; this.size=3+Math.random()*2;
+      }
+      update(){
+        this.x+=(this.tx-this.x)*0.02;
+        this.y+=(this.ty-this.y)*0.02;
+        this.x+=Math.sin(Date.now()/200+this.tx)*0.2;
+        this.y+=Math.cos(Date.now()/250+this.ty)*0.2;
+      }
+      draw(){
+        ctx.fillStyle=this.color;
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+        ctx.fill();
+      }
+    }
+
+    let particles=[];
+    function createHeart(){
+      particles=[];
+      let cx=W/3+70, cy=H/2.8, scale=13.7;
+      for(let i=0;i<600;i++){
+        let t=Math.random()*Math.PI*2;
+        let x=16*Math.pow(Math.sin(t),3);
+        let y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+        x*=scale; y*=-scale;
+        let color='hsl('+(330+Math.random()*30)+',80%,60%)';
+        particles.push(new Particle(Math.random()*W,Math.random()*H,cx+x,cy+y,color));
+      }
+    }
+    function animate(){
+      ctx.clearRect(0,0,W,H);
+      particles.forEach(p=>{ p.update(); p.draw(); });
+      requestAnimationFrame(animate);
+    }
+
+    // === Halaman 3 ===
+    function goToPage3(){
+      document.getElementById('lovePage').style.display='none';
+      document.getElementById('page3').style.display='flex';
+    }
+
+    // 🔒 Kunci semua gesture (scroll, zoom, swipe)
+    document.addEventListener('gesturestart', e => e.preventDefault());
+    document.addEventListener('touchmove', e => e.preventDefault(), { passive:false });
+    document.addEventListener('wheel', e => e.preventDefault(), { passive:false });
+  </script>
+</body>
+</html>
